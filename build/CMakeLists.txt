@@ -39,26 +39,17 @@ endif()
 
 set(LUA_SRC_PATH lua-${LUA_VERSION}/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
-#begin ======================== lua-cjson ========================
-set ( CJSON_SRC 
-    lua-cjson-2.1.0/strbuf.c
-    lua-cjson-2.1.0/lua_cjson.c
-    lua-cjson-2.1.0/fpconv.c
-)
-#add_definitions(-DUSE_INTERNAL_FPCONV)
-if(WIN32)
-    # Windows sprintf()/strtod() handle NaN/inf differently. Not supported.
-    add_definitions(-DDISABLE_INVALID_NUMBERS)
-endif()
-set_property(
-    SOURCE ${CJSON_SRC}
+# begin lua-cjson
+set (LUA_CJSON_SRC lua-cjson/fpconv.c lua-cjson/lua_cjson.c lua-cjson/strbuf.c)
+set_property (
+    SOURCE ${LUA_CJSON_SRC}
     APPEND
     PROPERTY COMPILE_DEFINITIONS
     LUA_LIB
 )
-list(APPEND THIRDPART_INC lua-cjson-2.1.0)
-set (THIRDPART_SRC ${THIRDPART_SRC} ${CJSON_SRC})
-#end ======================== lua-cjson ========================
+list (APPEND THIRDPART_INC lua-cjson)
+set (THIRDPART_SRC ${THIRDPART_SRC} ${LUA_CJSON_SRC})
+# end lua-cjson
 #begin lua-rapidjson
 set (RAPIDJSON_SRC lua-rapidjson/source/rapidjson.cpp)
 set_property(
