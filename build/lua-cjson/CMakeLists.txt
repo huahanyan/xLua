@@ -4,7 +4,7 @@
 #       Windows: set LUA_DIR=c:\lua51
 
 project(lua-cjson C)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 
 option(USE_INTERNAL_FPCONV "Use internal strtod() / g_fmt() code for performance")
 option(MULTIPLE_THREADS "Support multi-threaded apps with internal fpconv - recommended" ON)
@@ -15,7 +15,7 @@ if(NOT CMAKE_BUILD_TYPE)
         FORCE)
 endif()
 
-find_package(Lua51 REQUIRED)
+find_package(Lua REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
 
 if(NOT USE_INTERNAL_FPCONV)
@@ -66,13 +66,6 @@ if(WIN32)
     add_definitions(-DDISABLE_INVALID_NUMBERS)
 else()
     set(_lua_module_dir "${_lua_lib_dir}/lua/5.1")
-endif()
-
-if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-    add_definitions(-Dinline=__inline)
-    add_definitions(-Dsnprintf=_snprintf)
-    add_definitions(-Dstrncasecmp=_strnicmp)
 endif()
 
 add_library(cjson MODULE lua_cjson.c strbuf.c ${FPCONV_SOURCES})
