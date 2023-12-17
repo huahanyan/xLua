@@ -40,7 +40,7 @@ endif()
 set(LUA_SRC_PATH lua-${LUA_VERSION}/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
 # begin lua-cjson
-set (LUA_CJSON_SRC lua-cjson/source/fpconv.c lua-cjson/source/lua_cjson.c lua-cjson/source/strbuf.c lua-cjson/source/dtoa.c lua-cjson/source/g_fmt.c)
+set (LUA_CJSON_SRC lua-cjson/source/fpconv.c lua-cjson/source/lua_cjson.c lua-cjson/source/strbuf.c)
 set_property (
     SOURCE ${LUA_CJSON_SRC}
     APPEND
