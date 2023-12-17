@@ -35,12 +35,6 @@
 
 #include "fpconv.h"
 
-/* Workaround for MSVC */
-#ifdef _MSC_VER
-#define inline __inline
-#define snprintf sprintf_s
-#endif
-
 /* Lua CJSON assumes the locale is the same for all threads within a
  * process and doesn't change after initialisation.
  *
@@ -55,7 +49,7 @@ static char locale_decimal_point = '.';
  * localconv() may not be thread safe (=>crash), and nl_langinfo() is
  * not supported on some platforms. Use sprintf() instead - if the
  * locale does change, at least Lua CJSON won't crash. */
-static void fpconv_update_locale(void)
+static void fpconv_update_locale()
 {
     char buf[8];
 
@@ -130,7 +124,7 @@ double fpconv_strtod(const char *nptr, char **endptr)
     /* Duplicate number into buffer */
     if (buflen >= FPCONV_G_FMT_BUFSIZE) {
         /* Handle unusually large numbers */
-        buf = malloc(buflen + 1);
+        buf = (char *)malloc(buflen + 1);
         if (!buf) {
             fprintf(stderr, "Out of memory");
             abort();
@@ -202,7 +196,7 @@ int fpconv_g_fmt(char *str, double num, int precision)
     return len;
 }
 
-void fpconv_init(void)
+void fpconv_init()
 {
     fpconv_update_locale();
 }
