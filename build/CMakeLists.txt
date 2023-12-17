@@ -5,7 +5,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 cmake_minimum_required(VERSION 2.8)
-
+set(CMAKE_CXX_STANDARD 11)
 if ( WIN32 AND NOT CYGWIN AND NOT ( CMAKE_SYSTEM_NAME STREQUAL "WindowsStore" ) AND NOT ANDROID)
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT" CACHE STRING "")
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MTd" CACHE STRING "")
@@ -41,14 +41,19 @@ set(LUA_SRC_PATH lua-${LUA_VERSION}/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
 
 #begin lua-rapidjson
-set (RAPIDJSON_SRC lua-rapidjson/source/rapidjson.cpp)
-set_property(
-	SOURCE ${RAPIDJSON_SRC}
-	APPEND
-	PROPERTY COMPILE_DEFINITIONS
-	LUA_LIB
+set (RAPIDJSON_SRC
+    lua-rapidjson/source/Document.cpp
+    lua-rapidjson/source/rapidjson.cpp
+    lua-rapidjson/source/Schema.cpp
+    lua-rapidjson/source/values.cpp
 )
-list(APPEND THIRDPART_INC  lua-rapidjson/include)
+set_property(
+    SOURCE ${RAPIDJSON_SRC}
+    APPEND
+    PROPERTY COMPILE_DEFINITIONS
+    LUA_LIB
+)
+list(APPEND THIRDPART_INC lua-rapidjson/include)
 set (THIRDPART_SRC ${THIRDPART_SRC} ${RAPIDJSON_SRC})
 #end lua-rapidjson
 
