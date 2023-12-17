@@ -40,14 +40,14 @@ endif()
 set(LUA_SRC_PATH lua-${LUA_VERSION}/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
 # begin lua-cjson
-set (LUA_CJSON_SRC lua-cjson/fpconv.c lua-cjson/lua_cjson.c lua-cjson/strbuf.c)
+set (LUA_CJSON_SRC lua-cjson/source/fpconv.c lua-cjson/source/lua_cjson.c lua-cjson/source/strbuf.c lua-cjson/source/dtoa.c lua-cjson/source/g_fmt.c)
 set_property (
     SOURCE ${LUA_CJSON_SRC}
     APPEND
     PROPERTY COMPILE_DEFINITIONS
     LUA_LIB
 )
-list (APPEND THIRDPART_INC lua-cjson)
+list (APPEND THIRDPART_INC lua-cjson/include)
 set (THIRDPART_SRC ${THIRDPART_SRC} ${LUA_CJSON_SRC})
 # end lua-cjson
 #begin lua-rapidjson
