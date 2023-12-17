@@ -86,6 +86,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          xcode-version: "11.7"
       - name: Build
         run: |
           cd build
