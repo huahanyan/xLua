@@ -10,6 +10,17 @@ local json = require "cjson"
 local json_safe = require "cjson.safe"
 local util = require "cjson.util"
 
+local function json_encode_output_type(value)
+    local text = json.encode(value)
+    if string.match(text, "{.*}") then
+        return "object"
+    elseif string.match(text, "%[.*%]") then
+        return "array"
+    else
+        return "scalar"
+    end
+end
+
 local function gen_raw_octets()
     local chars = {}
     for i = 0, 255 do chars[i + 1] = string.char(i) end
@@ -93,7 +104,7 @@ local cjson_tests = {
     -- Test API variables
     { "Check module name, version",
       function () return json._NAME, json._VERSION end, { },
-      true, { "cjson", "2.1.0" } },
+      true, { "cjson", "2.1devel" } },
 
     -- Test decoding simple types
     { "Decode string",
@@ -261,10 +272,10 @@ local cjson_tests = {
       json.encode_invalid_numbers, { false }, true, { false } },
     { "Encode NaN [throw error]",
       json.encode, { NaN },
-      false, { "Cannot serialise number: must not be NaN or Inf" } },
+      false, { "Cannot serialise number: must not be NaN or Infinity" } },
     { "Encode Infinity [throw error]",
       json.encode, { Inf },
-      false, { "Cannot serialise number: must not be NaN or Inf" } },
+      false, { "Cannot serialise number: must not be NaN or Infinity" } },
     { "Set encode_invalid_numbers(\"null\")",
       json.encode_invalid_numbers, { "null" }, true, { "null" } },
     { "Encode NaN as null",
@@ -274,9 +285,11 @@ local cjson_tests = {
     { "Set encode_invalid_numbers(true)",
       json.encode_invalid_numbers, { true }, true, { true } },
     { "Encode NaN",
-      json.encode, { NaN }, true, { "nan" } },
-    { "Encode Infinity",
-      json.encode, { Inf }, true, { "inf" } },
+      json.encode, { NaN }, true, { "NaN" } },
+    { "Encode +Infinity",
+      json.encode, { Inf }, true, { "Infinity" } },
+    { "Encode -Infinity",
+      json.encode, { -Inf }, true, { "-Infinity" } },
     { 'Set encode_invalid_numbers("off")',
       json.encode_invalid_numbers, { "off" }, true, { false } },
 
@@ -290,8 +303,8 @@ local cjson_tests = {
       json.encode, { { [1] = "one", [4] = "sparse test" } },
       true, { '["one",null,null,"sparse test"]' } },
     { "Encode sparse array as object",
-      json.encode, { { [1] = "one", [5] = "sparse test" } },
-      true, { '{"1":"one","5":"sparse test"}' } },
+      json_encode_output_type, { { [1] = "one", [5] = "sparse test" } },
+      true, { 'object' } },
     { "Encode table with numeric string key as object",
       json.encode, { { ["2"] = "numeric string key test" } },
       true, { '{"2":"numeric string key test"}' } },
