@@ -82,16 +82,8 @@ jobs:
           path: ./build/plugin_luajit/**/*
           name: plugin_luajit
   ios:
-    runs-on: macos-11
-
+    runs-on: macos-latest
     steps:
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1.14
-        with:
-          cmake-version: "3.10"
-      - uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: "11.7"
       - uses: actions/checkout@v2
       - name: Build
         run: |
