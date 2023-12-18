@@ -35,7 +35,7 @@
  *       time (30%) managing tables when parsing JSON since it is
  *       difficult to know object/array sizes ahead of time.
  */
-
+#pragma warning(disable : 4996)
 #include <assert.h>
 #include <stdint.h>
 #include <string.h>
